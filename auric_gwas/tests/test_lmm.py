@@ -1,6 +1,6 @@
 """Portable unit tests for the LMM core (no frozen-panel access) + a marked known-answer integration.
 
-Run: /home/david/miniforge3/bin/python -m pytest auric_gwas/tests/test_lmm.py -v
+Run: python -m pytest auric_gwas/tests/test_lmm.py -v
 """
 import numpy as np
 import pytest

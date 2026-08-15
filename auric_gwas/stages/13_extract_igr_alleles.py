@@ -68,7 +68,7 @@ except Exception:
     COORD = Path("/fastpool/sausnp/db/coordinate_table.parquet")
     FEATURES_PQ = Path("/fastpool/sausnp/db/parquet/features.parquet")
     PROF_IGR = Path("/fastpool/sausnp/profiles/igr")
-    PANEL_QC = Path("/home/david/projects/staph_snp_db/results/qc")
+    PANEL_QC = Path(__file__).resolve().parent.parent / "data"
 
 FEATURES = FEATURES_PQ                 # read-only
 CORE_IGR_TSV = PANEL_QC / "stage4_core_igr.tsv"   # read-only panel state

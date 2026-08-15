@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Portable path/binary constants for the vendored AURIC genotyping stages (11-17).
 
-Derived from the validated staph_snp_db chop_nicu_reanalysis/common_paths.py, made distributable:
+Derived from the validated AURIC cohort-genotyping common_paths, made distributable:
   * every frozen READ-ONLY input resolves under AURIC_HOME (env var, default /fastpool/sausnp) with
     the layout db/ (sausnp.duckdb, coordinate_table.parquet, genotype_matrix/, hmm/, parquet/) and
     profiles/ + profiles_masked/ — the same layout auric_gwas.paths uses;
@@ -54,6 +54,7 @@ UNMASKED_AT_050 = ("group_4915", "group_5101")
 _DATA = Path(__file__).resolve().parent.parent / "data"
 CORE_CDS_TSV = _DATA / "stage4_core_cds.tsv"          # is_core_cds == True -> 1,751 families
 EXCLUDED_FEATURES = _DATA / "excluded_features.txt"   # 11 MSCRAMM adhesins, by name
+PANEL_QC = _DATA                                      # stage 13 reads stage4_core_igr.tsv from here
 
 # --------------------------------------------------------------------------------------------
 # WRITE targets — PLACEHOLDERS. auric_gwas.genotype rebinds all of these per request.

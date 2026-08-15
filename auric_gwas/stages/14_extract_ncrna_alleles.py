@@ -61,7 +61,8 @@ except Exception:
     COORD = Path("/fastpool/sausnp/db/coordinate_table.parquet")
     PROF_NCRNA = Path("/fastpool/sausnp/profiles/ncrna")
     PANEL_NC_HMM = Path("/fastpool/sausnp/db/genotype/nc_single.hmm")  # read-only
-    HMMBIN = "/home/david/miniforge3/envs/abricate/bin"
+    import shutil as _sh
+    HMMBIN = str(Path(_sh.which("hmmalign") or "hmmalign").parent)
 
 BUCKETS = BUCKETS_NC
 LOGS = COH / "noncoding_logs"          # kept separate from the coding arm's COH/logs

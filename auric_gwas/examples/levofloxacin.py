@@ -8,7 +8,7 @@ first. This is the example figure/box for the paper — the tool finds the known
 where it is.
 
 Data: results/analysis/amr/mic_phenotypes.tsv (levofloxacin clinical MICs, provenance-checked).
-Run:  AURIC_HOME=/fastpool/sausnp /home/david/miniforge3/bin/python auric_gwas/examples/levofloxacin.py
+Run:  AURIC_HOME=/path/to/auric_reference python auric_gwas/examples/levofloxacin.py
 """
 import os
 import sys
