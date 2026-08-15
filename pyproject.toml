@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "auric-gwas"
+version = "0.1.0"
+description = "Project S. aureus genomes onto the frozen AURIC coordinate system and run lineage-aware genome-wide association"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "David B. Haslam" }]
+keywords = ["Staphylococcus aureus", "GWAS", "bacterial", "AURIC", "lineage", "kinship", "AMR"]
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "pandas>=2.0",
+    "pyarrow>=12",
+    "zarr>=3.0",
+    "duckdb>=1.0",
+    "pyyaml>=6",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[project.scripts]
+auric-gwas = "auric_gwas.cli:main"
+
+[project.urls]
+Repository = "https://github.com/haslamdb/auric-gwas"
+
+[tool.setuptools]
+packages = ["auric_gwas", "auric_gwas.stages", "auric_gwas.tests"]
+
+[tool.setuptools.package-data]
+auric_gwas = ["data/*.tsv", "data/*.txt"]
+
+[tool.pytest.ini_options]
+markers = ["integration: requires the AURIC reference bundle (AURIC_HOME); not portable"]

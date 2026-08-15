@@ -1,0 +1,22 @@
+# Features hard-excluded from the callable set by name (spec §2.2).
+# One token per line; '#' comments ignored. Repeat detection (TRF/dustmasker)
+# excludes additional sites at runtime — this list is the by-name floor.
+
+# --- Alignment-hostile repeat / surface proteins ---
+spa
+coa
+clfA
+clfB
+sdrC
+sdrD
+sdrE
+fnbA
+fnbB
+ebh
+sasG
+
+# --- Multicopy structural RNAs (excluded as feature classes) ---
+# rRNA (5S/16S/23S) and tRNA genes are excluded by feature_type, not by name;
+# listed here for documentation.
+# rRNA
+# tRNA

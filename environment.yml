@@ -1,0 +1,24 @@
+# Full runtime for auric-gwas: analysis deps + the genotyping tool chain (on PATH).
+#   conda env create -f environment.yml && conda activate auric-gwas && pip install -e .
+name: auric-gwas
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python>=3.11
+  - numpy>=1.24
+  - scipy>=1.10
+  - pandas>=2.0
+  - pyarrow>=12
+  - zarr>=3.0
+  - python-duckdb>=1.0
+  - pyyaml>=6
+  - pytest>=7
+  # genotyping tool chain (binaries land on PATH; common_paths resolves them via shutil.which)
+  - prodigal
+  - hmmer
+  - seqkit
+  - skani
+  - checkm2
+  - mlst
+  - pip
