@@ -7,8 +7,10 @@ Derived from the validated AURIC cohort-genotyping common_paths, made distributa
     profiles/ + profiles_masked/ — the same layout auric_gwas.paths uses;
   * tool binaries resolve from PATH via shutil.which (override with AURIC_PRODIGAL / AURIC_HMMSEARCH /
     AURIC_HMMALIGN / AURIC_HMMPRESS / AURIC_NHMMER);
-  * the two small family-definition files (stage4_core_cds.tsv, excluded_features.txt) are vendored in
-    auric_gwas/data/.
+  * the three small family-definition files (stage4_core_cds.tsv, stage4_core_igr.tsv,
+    excluded_features.txt) are vendored in auric_gwas/data/ — kept in sync with staph_snp_db and
+    pinned by data/PROVENANCE.json (see auric_gwas/data_sync.py; re-sync with
+    scripts/sync_from_staph_snp_db.py).
 
 WRITE targets (COH and everything under it) are PLACEHOLDERS here: auric_gwas.genotype generates a
 per-request module that inherits this one and rebinds them to the request root. Nothing under AURIC_HOME

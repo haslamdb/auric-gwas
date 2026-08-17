@@ -34,7 +34,7 @@ Repository = "https://github.com/haslamdb/auric-gwas"
 packages = ["auric_gwas", "auric_gwas.stages", "auric_gwas.tests"]
 
 [tool.setuptools.package-data]
-auric_gwas = ["data/*.tsv", "data/*.txt"]
+auric_gwas = ["data/*.tsv", "data/*.txt", "data/*.json"]
 
 [tool.pytest.ini_options]
 markers = ["integration: requires the AURIC reference bundle (AURIC_HOME); not portable"]
