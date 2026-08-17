@@ -3,7 +3,7 @@
 This is an end to end workflow that projects *Staphylococcus aureus* genomes onto the frozen **AURIC** coordinate system and runs
 **lineage-aware genome-wide association**. AURIC assigns every core single-nucleotide variant a stable
 identifier defined by gene family, profile-HMM match state and codon position, so genomes added years
-apart — or from different cohorts — share one coordinate system. `auric-gwas` genotypes your assemblies
+apart or from different cohorts share one coordinate system. `auric-gwas` genotypes your assemblies
 onto that system (read-only against the frozen reference) and runs the two-pass association the AURIC
 paper recommends: a lineage-unadjusted scan and a lineage-aware mixed model (EMMAX-style, with an
 AURIC-derived kinship matrix), returning every variant ranked and annotated.
