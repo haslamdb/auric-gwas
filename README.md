@@ -53,7 +53,7 @@ AURIC annotation), `association_top.tsv`, and `diagnostics.json` (λ_GC for both
 significant-count collapse, and over-correction warnings). A continuous phenotype (e.g. log₂ MIC) uses
 `--pheno-type continuous`; covariates are `--covar-cols a,b`.
 
-## Worked example (reproduces the paper's positive control)
+## Practical example (reproduces the paper's positive control)
 
 Levofloxacin, 266 clinical-MIC isolates, cohort as a fixed covariate. The scan is **blind to functional
 annotation** — no locus is named in advance — yet recovers the quinolone determinant *gyrA* Ser84Leu as
