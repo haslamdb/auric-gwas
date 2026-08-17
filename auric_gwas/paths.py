@@ -77,6 +77,56 @@ def db_version(path: Path | None = None) -> str:
     return json.loads(Path(path or db_version_json()).read_text()).get("db_version", "unknown")
 
 
+class BundleMismatchError(RuntimeError):
+    """The deployed AURIC bundle comes from a different freeze than the vendored family files."""
+
+
+def assert_bundle_compatible(path: Path | None = None) -> None:
+    """Fail if the deployed bundle's freeze does not match the vendored family definitions.
+
+    The three files under auric_gwas/data/ (stage4_core_cds.tsv, stage4_core_igr.tsv,
+    excluded_features.txt) are keyed to a specific staph_snp_db panel/coordinate freeze, pinned in
+    data/PROVENANCE.json. Pointing AURIC_HOME at a bundle from a different freeze can emit wrong
+    genotypes silently. This compares the bundle db_version.json's backbone_panel.sha256 and
+    coordinate_system.profile_hmm_checksums.profile_set_sha256 to the manifest and raises on any
+    mismatch. Set AURIC_SKIP_BUNDLE_CHECK=1 to bypass (e.g. a deliberate cross-freeze run).
+
+    Only checksums the manifest actually records are enforced; a manifest field left null is skipped.
+    Raises FileNotFoundError if the bundle db_version.json is absent, RuntimeError if the manifest is.
+    """
+    import json
+    if os.environ.get("AURIC_SKIP_BUNDLE_CHECK"):
+        return
+    from . import data_sync
+    if not data_sync.MANIFEST.is_file():
+        raise RuntimeError(f"provenance manifest missing: {data_sync.MANIFEST} (packaging bug)")
+    manifest = data_sync.load_manifest()
+
+    p = Path(path or db_version_json())
+    if not p.is_file():
+        raise FileNotFoundError(
+            f"AURIC bundle db_version.json not found at {p}; set AURIC_HOME to the unpacked bundle")
+    dbv = json.loads(p.read_text())
+
+    checks = [
+        ("backbone panel", manifest.get("backbone_panel_sha256"),
+         dbv.get("backbone_panel", {}).get("sha256")),
+        ("coordinate profile set", manifest.get("coordinate_profile_set_sha256"),
+         dbv.get("coordinate_system", {}).get("profile_hmm_checksums", {}).get("profile_set_sha256")),
+    ]
+    mismatches = [
+        f"{label}: bundle {got} != vendored {want}"
+        for label, want, got in checks if want is not None and got != want
+    ]
+    if mismatches:
+        raise BundleMismatchError(
+            "deployed AURIC bundle does not match the vendored family definitions (data/PROVENANCE.json, "
+            f"db_version {manifest.get('db_version')}); bundle db_version {dbv.get('db_version')}:\n  "
+            + "\n  ".join(mismatches)
+            + "\nPoint AURIC_HOME at the matching freeze, re-sync via scripts/sync_from_staph_snp_db.py, "
+              "or set AURIC_SKIP_BUNDLE_CHECK=1 to override.")
+
+
 def set_thread_caps(n: int = 4) -> None:
     """Cap BLAS/OMP threads. MUST run before numpy is imported by the caller for it to bite fully."""
     for var in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "NUMEXPR_NUM_THREADS"):

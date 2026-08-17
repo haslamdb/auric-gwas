@@ -103,6 +103,7 @@ def run_genotype(out: str | Path, *, assemblies_dir: str | Path | None = None,
                  python: str | None = None) -> Path:
     """Genotype the assemblies into <out>/genotype_matrix/genotypes.zarr. Returns the matrix dir."""
     python = python or sys.executable
+    paths.assert_bundle_compatible()
     root = paths.assert_not_panel(out)
     root.mkdir(parents=True, exist_ok=True)
 

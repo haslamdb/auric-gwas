@@ -14,6 +14,7 @@ from . import lmm, matrix, phenotype, annotate as annot, paths
 def run(pheno_spec: dict, *, source: str = "panel", matrix_dir=paths.MATRIX,
         min_mac: int = 5, max_miss: float = 0.10, annotate_top: int = 200) -> dict:
     """pheno_spec is the kwargs dict for phenotype.load. Returns {results, diagnostics}."""
+    paths.assert_bundle_compatible()
     ph = phenotype.load(**pheno_spec)
     samples, y, covar = ph["samples"], ph["y"], ph["covar"]
 
