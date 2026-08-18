@@ -1,7 +1,7 @@
 # auric-gwas
 
-This is an end-to-end workflow that finds the genetic changes associated with a trait, including antibiotic
-resistance and virulence across a collection of *Staphylococcus aureus* genomes, while
+This is an end-to-end workflow that finds the genetic changes associated with a trait, such as antibiotic
+resistance or virulence, across a collection of *Staphylococcus aureus* genomes, while
 correcting for the fact that bacteria inherit most of their DNA in a block.
 
 `auric-gwas` places your assembled genomes onto **AURIC**, a frozen, species-wide coordinate system
