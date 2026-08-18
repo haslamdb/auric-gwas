@@ -59,8 +59,8 @@ That frozen coordinate system is what makes AURIC useful beyond one study:
   results can be pooled and compared directly.
 - **Completeness.** The catalogue spans the whole species' core genome (1,231,021 high-confidence
   variant positions), including genes absent from any single reference strain.
-- **Honest positions only.** A position is scored only where **orthology** is guaranteed — the
-  position is genuinely "the same position by descent" across genomes: present in nearly all strains,
+- **Orthology-guaranteed positions only.** A position is scored only where **orthology** holds — where
+  it is genuinely "the same position by descent" across genomes: present in nearly all strains,
   single-copy, and not inside a repeat. Everything else is **masked** and reported, not silently
   dropped.
 - **A homoplasy statistic.** For every variant AURIC records **`n_origins`** — how many times the
