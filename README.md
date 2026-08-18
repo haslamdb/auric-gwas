@@ -85,15 +85,31 @@ species-specific, and trades that flexibility for standardization.
 |---|---|---|
 | **Variant space** | Whatever you supply — k-mers, unitigs, or SNPs vs. your chosen reference. Identifiers are study-local. | The frozen AURIC catalogue. Identifiers (`SAU_…`) are permanent and shared across every study. |
 | **Cross-study comparability** | Limited — a k-mer or a reference position means different things in different runs. | Built in — the coordinate system is the same catalogue for everyone. |
-| **Population-structure correction** | You provide it (a phylogeny or a distance/similarity matrix). | Computed for you as a genomic relatedness matrix from your cohort's genotypes *on the AURIC coordinates*, then applied EMMAX-style. |
+| **Population-structure correction** | You supply the similarity matrix (from a phylogeny or a core-genome distance) and choose a model — fixed-effects with MDS covariates, a FaST-LMM mixed model (`--lmm`), or elastic net. | Fixed choice: a genomic relatedness matrix built for you from your cohort's genotypes *on the AURIC coordinates*, applied EMMAX-style. |
 | **Annotation** | Separate step you run afterward on your hits. | Top hits arrive pre-joined to AURIC's layer: coding consequence, amino-acid change, `n_origins`, ESM-2 constraint, AMR/virulence labels, recombination fraction. |
 | **Determinant vs. lineage marker** | You infer it yourself. | The homoplasy count (`n_origins`) and coding consequence are in the output to make that call. |
 | **Scope** | Any bacterium, any variant representation. | *S. aureus* only; core single-nucleotide variants only. |
 
+**On the mixed model specifically.** When pyseer is run in its LMM mode (`--lmm`), the statistical
+model is essentially the one `auric-gwas` uses. Both fit a single-kinship linear mixed model
+(y = Xβ + u + ε, u ~ N(0, σ²_g·K)) and both estimate the variance component **once** under the null
+— covariates and kinship, no tested variant — then hold it fixed while scanning the genome, rather
+than re-fitting per variant. They differ in lineage and detail, not in kind: EMMAX (Kang et al.,
+*Nat Genet* 2010) eigendecomposes K, estimates the variance ratio by REML, and applies a rotated GLS
+Wald test per variant; pyseer's LMM is FaST-LMM (Lippert et al., *Nat Methods* 2011), which estimates
+the component by ML and tests with a likelihood-ratio statistic, its low-rank factorization giving a
+speed advantage when few features build K. On a full-rank GRM the two produce nearly identical
+p-values. The consequential difference between the tools is therefore the **input** — pyseer LMM
+typically over k-mers/unitigs with a phylogeny-derived similarity matrix, `auric-gwas` over AURIC
+core-SNP genotypes with a GRM built from them — not the mixed-model math. pyseer's other modes
+(fixed-effects with MDS covariates, elastic net) are genuinely different approaches; EMMAX
+corresponds to `--lmm`, not to those.
+
 The short version: use `pyseer` when you need k-mer/accessory-genome association, a non-model
-organism, or full control over the variant representation. Use `auric-gwas` when your organism is
-*S. aureus*, you want core-SNP association on a stable coordinate system, and you want results that
-pool cleanly with other AURIC-based studies and come annotated for interpretation.
+organism, or full control over the variant representation and the association model. Use `auric-gwas`
+when your organism is *S. aureus*, you want core-SNP association on a stable coordinate system, and
+you want results that pool cleanly with other AURIC-based studies and come annotated for
+interpretation.
 
 ---
 
