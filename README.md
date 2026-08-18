@@ -149,9 +149,13 @@ auric-gwas scan \
 1. **Lineage-blind** — an ordinary linear model, no ancestry correction. This is the scan dominated by
    clonal confounding; it is reported so you can *see* the confounding, not because you should trust it.
 2. **Lineage-aware** — an **EMMAX** mixed model (Kang et al., *Nat Genet* 2010). A genomic relatedness
-   matrix (GRM) is built from your cohort's genotypes, one variance-component ratio is estimated once
-   from the kinship-only null by REML, then held fixed while every variant is tested by generalized
-   least squares. This discounts the similarity strains share by descent.
+   matrix (GRM) is built from your cohort's genotypes, and one variance-component ratio (the balance of
+   lineage variance to residual variance) is estimated once from the kinship-only null by **REML**
+   (restricted maximum likelihood — the standard estimator for variance components in a mixed model,
+   which corrects the downward bias of ordinary maximum likelihood). That ratio is then held fixed
+   while every variant is tested by **GLS** (generalized least squares — least squares that weights
+   observations by the inverse of their covariance, so correlated isolates are down-weighted). This
+   discounts the similarity strains share by descent.
 
 Phenotypes can be **binary** (e.g. resistant vs. susceptible from an MIC breakpoint via `--r-ge` /
 `--s-le`) or **continuous** (`--pheno-type continuous`, e.g. log₂ MIC). Covariates are
