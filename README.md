@@ -1,8 +1,8 @@
 # auric-gwas
 
-This is an end-to-end workflow that finds the genetic changes associated with a trait, such as antibiotic
-resistance or virulence, across a collection of *Staphylococcus aureus* genomes, while
-correcting for the fact that bacteria inherit most of their DNA in a block.
+An end-to-end workflow for associating genetic variants with a trait — antibiotic resistance,
+virulence, host — across a collection of *Staphylococcus aureus* genomes, with the clonal population
+structure that dominates bacterial genomes controlled by a lineage-aware mixed model.
 
 `auric-gwas` places your assembled genomes onto **AURIC**, a frozen, species-wide coordinate system
 for *S. aureus*, and runs a **genome-wide association study (GWAS)**: it tests every catalogued
@@ -12,28 +12,27 @@ can tell a genuine determinant from a passenger that merely marks a lineage.
 
 ---
 
-## The problem, in plain terms
+## Two problems specific to bacterial GWAS
 
-Two facts about bacteria make GWAS hard, and AURIC addresses both.
+**1. Clonal population structure inflates the association.** *S. aureus* is a largely clonal,
+asexually reproducing species: it recombines rarely relative to its mutation rate, so linkage
+disequilibrium extends across the entire chromosome rather than decaying over kilobases as it does in
+sexually recombining organisms. A resistant strain and its recent descendants therefore share not
+only the causal allele but the tens of thousands of neutral, co-inherited variants that mark their
+lineage — the genomic background and the phenotype are confounded by shared ancestry. An unadjusted
+scan cannot separate the two: in the worked example below it returns **16,205** genome-wide-significant
+variants for fluoroquinolone resistance, nearly all of them lineage markers rather than determinants.
+The correction is a **mixed model** with a **kinship (genomic relatedness) matrix** as a random
+effect, which absorbs the covariance two isolates share by descent and tests each variant against that
+background.
 
-**1. Bacteria are clonal, so almost everything is correlated with almost everything.** *S. aureus*
-reproduces by copying itself. A successful strain leaves thousands of near-identical descendants that
-share the whole genome, not just the one mutation that matters. So a strain that is resistant to a
-drug also carries thousands of *unrelated* mutations it happened to inherit from the same ancestor. A
-naive association test flags all of them. In the worked example below, an uncorrected scan calls
-**16,205** variants "significant" for fluoroquinolone resistance; almost all of them simply mark the
-resistant lineages rather than cause resistance. This is **clonal (population-structure) confounding**,
-and controlling it is the central task of any bacterial GWAS. The standard fix is a **kinship matrix**
-(a table of how related every pair of strains is) fed to a **mixed model** that discounts similarity
-two strains share only because they are cousins.
-
-**2. There is no stable place to put a variant.** The usual way to name a variant is by its position
-on one chosen **reference genome** — "position 1,473,201 of NCTC 8325." This breaks down for a
-species like *S. aureus*, organized into ~55 divergent lineages (**clonal complexes**), for two
-reasons. First, genes present in your strains but absent from the reference simply cannot be named at
-all. Second, every time a study rebuilds its variant set from a fresh genome comparison, the positions
-renumber — so variant "position 41,203" in one paper and the same biological change in another paper
-have different names, and results cannot be pooled or compared across studies.
+**2. Variant coordinates are not stable across studies.** The conventional identifier is a position on
+one chosen **reference genome** — "position 1,473,201 of NCTC 8325." For a species partitioned into
+~55 divergent lineages (**clonal complexes**) with a large accessory genome, that fails twice. Core
+genes absent from the reference cannot be addressed at all, and every study that recalls variants
+against a different reference — or rebuilds its coordinate set from a fresh pangenome — renumbers
+everything, so the same biological substitution carries a different identifier in each paper and
+results cannot be pooled or meta-analyzed.
 
 ---
 
