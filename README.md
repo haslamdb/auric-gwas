@@ -166,8 +166,14 @@ Phenotypes can be **binary** (e.g. resistant vs. susceptible from an MIC breakpo
   AMR labels).
 - **`association_top.tsv`** — the top hits, for quick reading.
 - **`diagnostics.json`** — the health checks that tell you whether to trust the run: the
-  genomic-control **λ_GC** for both scans (how inflated each is), the kinship heritability **h²**, the
-  significant-count collapse from blind to aware, and explicit **over-correction warnings**.
+  **genomic-control λ_GC** for both scans, the kinship heritability **h²**, the significant-count
+  collapse from blind to aware, and explicit **over-correction warnings**. λ_GC is the ratio of the
+  observed median test statistic to the value expected under the null (Devlin & Roeder, 1999); λ_GC ≈ 1
+  is calibrated, λ_GC > 1 indicates inflation from uncontrolled population structure, and λ_GC < 1
+  indicates over-correction. h² is the proportion of phenotypic variance explained by the kinship
+  matrix — the fraction attributable to lineage; h² near 1 means the phenotype is almost entirely
+  predicted by ancestry, so the mixed model has little residual signal to work with and tends to
+  over-correct.
 
 Read `diagnostics.json` before the hit list. A λ_aware far below 1 means the mixed model
 over-corrected (see the example), in which case the aware ranking is conservative and you lean on
